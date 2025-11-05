@@ -21,6 +21,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Text: clean, readable formatting with visual separators
 - Timestamped filename generation (e.g., `query_2025-11-05_143022.sql`)
 - Proper MIME type handling for each export format
+- **Security features**:
+  - Input validation for export format parameter
+  - Sanitization of driver parameter to prevent path traversal
+  - Query validation to prevent empty or invalid inputs
+  - Filename sanitization to prevent header injection (RFC 6266 compliant)
+  - HTML entity escaping for driver names in output
+  - Additional security header (X-Content-Type-Options: nosniff)
 - Comprehensive documentation in README.md
 - Practical examples in `examples/` directory:
   - `plugin.php` - Example plugin loader
@@ -28,8 +35,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `example_export.js` - Sample JavaScript export
   - `example_export.txt` - Sample text export
   - `examples/README.md` - Detailed examples documentation
+- Comprehensive test suite with 27 automated tests:
+  - Functionality tests
+  - Security validation tests
+  - Edge case handling tests
 - Apache License 2.0
 - Contributing guidelines in CONTRIBUTING.md
+- Visual guide in VISUAL_GUIDE.md
+- Quick reference in QUICK_REFERENCE.md
+- Installation guide in INSTALL.md
 
 ### Features
 - One-click export from SQL command page

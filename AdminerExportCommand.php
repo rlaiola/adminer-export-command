@@ -53,25 +53,44 @@ class AdminerExportCommand {
      * @param string $query SQL query to export
      */
     private function exportCommand($query) {
+        // Validate export format
+        $allowedFormats = array("sql", "js", "txt");
         $format = isset($_POST["export_format"]) ? $_POST["export_format"] : "sql";
-        $driver = isset($_GET["driver"]) ? $_GET["driver"] : "server";
+        if (!in_array($format, $allowedFormats, true)) {
+            $format = "sql"; // Default to SQL if invalid format provided
+        }
+        
+        // Sanitize driver parameter
+        $driver = isset($_GET["driver"]) ? preg_replace('/[^a-zA-Z0-9_-]/', '', $_GET["driver"]) : "server";
+        if (empty($driver)) {
+            $driver = "server";
+        }
+        
+        // Validate and sanitize query
+        if (empty($query) || !is_string($query)) {
+            $query = "-- No query provided";
+        }
         
         // Determine file extension and MIME type based on format and driver
         $extension = $format;
         $mimeType = $this->getMimeType($format);
         
-        // Generate filename
-        $filename = "query_" . date("Y-m-d_His") . "." . $extension;
+        // Generate safe filename (RFC 6266 compliant)
+        $timestamp = date("Y-m-d_His");
+        $filename = "query_" . $timestamp . "." . $extension;
+        // Ensure filename only contains safe characters
+        $filename = preg_replace('/[^a-zA-Z0-9._-]/', '_', $filename);
         
         // Prepare content based on format
         $content = $this->prepareContent($query, $format, $driver);
         
         // Send headers for download
         header("Content-Type: " . $mimeType);
-        header("Content-Disposition: attachment; filename=\"" . $filename . "\"");
+        header("Content-Disposition: attachment; filename=\"" . addslashes($filename) . "\"");
         header("Content-Length: " . strlen($content));
         header("Cache-Control: no-cache, must-revalidate");
         header("Pragma: no-cache");
+        header("X-Content-Type-Options: nosniff");
         
         echo $content;
         exit;
@@ -102,6 +121,9 @@ class AdminerExportCommand {
      * @return string Formatted content
      */
     private function prepareContent($query, $format, $driver) {
+        // Escape special characters in driver name for output
+        $driver = htmlspecialchars($driver, ENT_QUOTES, 'UTF-8');
+        
         if ($format == "sql") {
             // Add SQL comment with metadata
             $content = "-- Exported from Adminer\n";

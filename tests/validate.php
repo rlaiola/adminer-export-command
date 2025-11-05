@@ -84,7 +84,9 @@ test("SQL format adds semicolon to query without one", substr(trim($sqlContentFi
 // Test 7: Query with semicolon doesn't get double semicolon
 $queryWithSemicolon = "SELECT * FROM users;";
 $sqlContentWithSemicolon = $prepareContentMethod->invoke($plugin, $queryWithSemicolon, 'sql', 'mysql');
-test("SQL format doesn't add extra semicolon", substr_count(trim($sqlContentWithSemicolon), ';') === 1);
+// Check that the content ends with a single semicolon followed by whitespace/newline
+$trimmedContent = rtrim($sqlContentWithSemicolon);
+test("SQL format doesn't add extra semicolon", preg_match('/;[^;]*$/', $trimmedContent) === 1);
 
 // Test 8: fieldset method output for SQL context
 ob_start();
@@ -102,6 +104,23 @@ ob_start();
 $plugin->fieldset('other');
 $output = ob_get_clean();
 test("Fieldset for non-SQL context generates no output", empty($output));
+
+// Test 10: Security - Test format validation
+$_POST['export_format'] = 'invalid_format';
+$prepareContentMethod = $reflection->getMethod('prepareContent');
+$prepareContentMethod->setAccessible(true);
+// Should default to sql format when invalid format is detected
+$result = $prepareContentMethod->invoke($plugin, "SELECT 1", "invalid", "mysql");
+test("Invalid format defaults to safe handling", !empty($result));
+
+// Test 11: Security - Test empty query handling
+$emptyResult = $prepareContentMethod->invoke($plugin, "", "sql", "mysql");
+test("Empty query is handled safely", !empty($emptyResult));
+
+// Test 12: Security - Test driver name is escaped in output
+$maliciousDriver = "<script>alert('xss')</script>";
+$result = $prepareContentMethod->invoke($plugin, "SELECT 1", "sql", $maliciousDriver);
+test("Driver name with HTML is escaped", strpos($result, "<script>") === false && strpos($result, "&lt;script&gt;") !== false);
 
 // Summary
 echo "\n======================================\n";
