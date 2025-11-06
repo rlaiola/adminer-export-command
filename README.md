@@ -27,7 +27,7 @@ This plugin solves that problem by adding an "Export" link/button to the SQL com
 
 ## How To Contribute
 
-If you would like to help contribute, please see [CONTRIBUTING](https://github.com/rlaiola//blob/main/CONTRIBUTING.md).
+If you would like to help contribute, please see [CONTRIBUTING](https://github.com/rlaiola/adminer-export-command/blob/main/CONTRIBUTING.md).
 
 Before submitting a PR consider checking your code with Super-Linter:
 
