@@ -22,7 +22,7 @@
 
 /**
  * Plugin to export current sql command as a file
- * @author Rodrigo Laiola Guimaraes, https://www.rodrigolaiola.com/
+ * @author Rodrigo Laiola Guimaraes, https://github.com/rlaiola
  */
 class AdminerExportCommand extends Adminer\Plugin
 {
