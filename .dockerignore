@@ -1,0 +1,12 @@
+**/.devcontainer
+**/.dockerignore
+**/.DS_Store
+**/.env*
+**/.git
+**/.github
+**/.gitignore
+**/.vscode
+**/docker-compose*
+**/Dockerfile*
+LICENSE
+*.md

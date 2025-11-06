@@ -1,0 +1,76 @@
+---
+#========================================================================
+# Copyright Universidade Federal do Espirito Santo (Ufes)
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+# This program is released under license GNU GPL v3+ license.
+#
+#========================================================================
+
+services:
+  devcontainer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # Mounts the workspace folder to /workspaces in the container.
+    volumes:
+      - ../..:/workspaces:cached
+    # Overrides default command so things don't shut down after the process ends.
+    command: sleep infinity
+    # Runs app on the same network as the database container, allows
+    # "forwardPorts" in devcontainer.json
+    network_mode: host
+    # Use "forwardPorts" in **devcontainer.json** to forward an app port locally.
+    # (Adding the "ports" property to this file will not forward from a Codespace.)
+
+  # MySQL server 8+
+  mysql-server:
+    # reference image
+    image: mysql:8
+    environment:
+      # root password
+      MYSQL_ROOT_PASSWORD: Example@1
+    # determine whether or not it is healthy
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'mysqladmin',
+          'ping',
+          '-h',
+          'localhost',
+          '-uroot',
+          '-pExample@1'
+        ]
+      interval: 10s # interval between health checks
+      timeout: 5s # timeout for each health checking
+      retries: 20 # how many times retries
+      start_period: 10s # estimated time to boot
+
+  # Adminer: full-featured database management tool written in PHP
+  # this container might be useful to manage databases of interest
+  adminer:
+    # reference image
+    image: adminer:5
+    environment:
+      # Adminer configuration
+      ADMINER_DEFAULT_SERVER: mysql-server
+      ADMINER_PLUGINS: export-command
+    volumes:
+      # mount volume to container's FS
+      # custom plugin
+      - ../export-command.php:/var/www/html/plugins/export-command.php:ro
+    ports:
+      - 8080:8080
