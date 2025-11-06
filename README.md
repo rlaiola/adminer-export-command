@@ -4,7 +4,7 @@ A plugin for [Adminer](https://www.adminer.org/) that adds functionality to expo
 
 ## Overview
 
-When working with databases through Adminer, users often need to save their SQL queries for documentation, sharing, or version control. While Adminer provides excellent database management capabilities, it lacks a straightforward way to export the current SQL command being edited.
+When working with databases through Adminer, users often need to save their SQL queries for documentation, sharing, backup, or version control. While Adminer provides excellent database management capabilities, it lacks a straightforward way to export the current SQL command being edited.
 
 This plugin solves that problem by adding an **Export** link/button to the SQL command editor, allowing users to:
 
