@@ -20,7 +20,7 @@
 #========================================================================
 
 services:
-  devcontainer:
+  adminer-export-command-devcontainer:
     build:
       context: .
       dockerfile: Dockerfile

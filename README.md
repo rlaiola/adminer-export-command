@@ -2,6 +2,21 @@
 
 A plugin for [Adminer](https://www.adminer.org/) that adds functionality to export SQL commands as downloadable files directly from the SQL command editor interface.
 
+---
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [Code of Conduct](#code-of-conduct)
+- [Security](#security)
+- [License](#license)
+
+---
+
 ## Overview
 
 When working with databases through Adminer, users often need to save their SQL queries for documentation, sharing, backup, or version control. While Adminer provides excellent database management capabilities, it lacks a straightforward way to export the current SQL command being edited.
@@ -12,6 +27,8 @@ This plugin solves that problem by adding an **Export** link/button to the SQL c
 - Open queries in a new browser window for quick viewing
 - Automatically timestamp exported files for better organization
 - Preserve their work for future reference or sharing
+
+---
 
 ## Features
 
@@ -30,7 +47,7 @@ You can use this plugin with the official Adminer Docker image or in a non-Docke
 For reference on how to enable and use Adminer plugins, see the official documentation:  
 👉 [https://www.adminer.org/en/plugins/#use](https://www.adminer.org/en/plugins/#use)
 
-### Option A: Docker Compose
+### Option 1: Docker Compose
 
 ```yaml
 # docker-compose.yml
@@ -53,7 +70,7 @@ docker compose up -d
 
 Access Adminer at [http://localhost:8080](http://localhost:8080).
 
-### Option B: Docker (docker run)
+### Option 2: Docker (docker run)
 
 Run Adminer with the plugin enabled and the file mounted:
 
@@ -73,13 +90,15 @@ docker cp export-command.php adminer:/var/www/html/plugins/export-command.php
 docker restart adminer
 ```
 
-### Option C: Non-Docker (manual setup)
+### Option 3: Non-Docker (manual setup)
 
 If you’re running Adminer outside of Docker:
 
 1. Place `export-command.php` in your Adminer `plugins/` directory.
 2. Enable it following Adminer’s official plugin usage guide:  
    👉 [https://www.adminer.org/en/plugins](https://www.adminer.org/en/plugins)
+
+---
 
 ## Usage
 
@@ -97,20 +116,37 @@ If you’re running Adminer outside of Docker:
 
 5. **Download**: Your query will be downloaded with a timestamped filename like `query_20250131_143025.sql`
 
-## How To Contribute
+---
 
-If you would like to help contribute, please see [CONTRIBUTING](https://github.com/rlaiola/adminer-export-command/blob/main/CONTRIBUTING.md).
+## Contributing
 
-Before submitting a PR, lint your code with Super-Linter:
+If you would like to contribute to this project, please see **[CONTRIBUTING.md](CONTRIBUTING.md)**.
 
-```sh
+Before submitting a PR, you may test your code using Super-Linter:
+
+```bash
 docker run --rm \
            -e ACTIONS_RUNNER_DEBUG=true \
            -e RUN_LOCAL=true \
+           -e DEFAULT_BRANCH=main \
            --env-file ".github/super-linter.env" \
            -v "$PWD":/tmp/lint \
            ghcr.io/super-linter/super-linter:latest
 ```
+
+---
+
+## Code of Conduct
+
+See **[CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)** for community standards.
+
+---
+
+## Security
+
+See **[SECURITY.md](SECURITY.md)** for vulnerability reporting instructions.
+
+---
 
 ## License
 
@@ -130,7 +166,3 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 This program is released under license GNU GPL v3+ license.
-
-## Support
-
-Please report any issues with _adminer-export-command_ at [https://github.com/rlaiola/adminer-export-command/issues](https://github.com/rlaiola/adminer-export-command/issues)
